@@ -6,6 +6,7 @@ import ProductList from './ProductList';
 import CategoryPage from './CategoryPage';
 import { Box } from '@chakra-ui/layout';
 import ProductPage from './ProductPage';
+import UserProfile from './UserProfile';
 function App() {
   return (
   <Router>
@@ -29,6 +30,9 @@ function App() {
       </Route>
       <Route path='/p/:title'>
           <ProductPage />
+      </Route>
+      <Route path='/userprofile'>
+        <UserProfile />
       </Route>
       <Route path='/'>
         <Home />

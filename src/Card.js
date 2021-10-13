@@ -79,3 +79,44 @@ function Card() {
 }
 
 export default Card;
+
+export function OrderCard(){
+  return (
+    <LinkBox>
+      <Box
+        bg={useColorModeValue('white', 'gray.800')}
+        borderWidth="1px"
+        rounded="sm"
+        shadow="sm"
+        position="relative"
+        maxWidth='20rem'
+        >
+        <Image
+          src={data.imageURL}
+          alt={`Picture of ${data.name}`}
+          roundedTop="sm" 
+        />
+        <Box p="6" pb='0'>
+          <Flex mt="1" justifyContent="space-between" alignContent="center">
+          <LinkOverlay href='/p/sampleProduct'>
+            <Box
+              fontSize="2xl"
+              fontWeight="semibold"
+              as="h4"
+              lineHeight="tight"
+              isTruncated>
+              {data.name}
+            </Box>
+            </LinkOverlay>
+            <Box as="span" color={'gray.600'} fontSize="lg">
+            £    {data.price.toFixed(2)}
+
+          </Box>
+          </Flex>
+        </Box>
+        <Box p={6} pt={3}>
+        21 Jan 2021
+        </Box>
+      </Box>
+      </LinkBox>);
+}
