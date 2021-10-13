@@ -2,13 +2,9 @@ import {
   Box,
   useColorModeValue,
   Heading,
-  Text,
-  Stack,
   Image,
 } from '@chakra-ui/react';
 import { LinkBox, LinkOverlay } from '@chakra-ui/layout';
-const IMAGE =
-  'https://images.unsplash.com/photo-1518051870910-a46e30d9db16?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1350&q=80';
 
 export default function Category({title,image}) {
   return (
@@ -53,7 +49,7 @@ export default function Category({title,image}) {
             src={image}
           />
         </Box>
-        <LinkOverlay href='#'>
+        <LinkOverlay href={`/c/${title.toLowerCase()}`}>
         <Heading fontSize={'2xl'} fontFamily={'body'} fontWeight={500} align='center' p='2rem 0 1rem'>
         {title}
         </Heading>

@@ -1,11 +1,13 @@
-import { Box, Center, Flex, VStack} from "@chakra-ui/layout"
+import { Box, Center, Flex} from "@chakra-ui/layout"
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input"
 import { Link } from "@chakra-ui/layout"
+import { Link as RouterLink } from "react-router-dom"
 import heart from "./assets/favorite_black_24dp.svg"
 import cart from "./assets/shopping_bag_black_24dp.svg"
 import person from "./assets/person_black_24dp.svg"
 import lookingGlass from "./assets/search_black_24dp.svg"
-import { Button, IconButton } from "@chakra-ui/button"
+import {IconButton } from "@chakra-ui/button"
+
 import { useState } from "react"
 function Suggestions({values, suggest}){
   return <Flex direction='column' position='absolute' bottom='0px' transform='translateY(100%)' width='100%' background='white'
@@ -18,40 +20,42 @@ function Suggestions({values, suggest}){
   </Flex>
 }
 export function Nav(){
-  let [searchText,setSearchText] = useState('hi');
+  let [searchText,setSearchText] = useState('');
   return <Flex>
-    <Center padding='0 20px'>Logo</Center>
+    <Center padding='0 20px'>
+    <RouterLink to='/'>Logo</RouterLink>
+    </Center>
     <InputGroup>
       <Input placeholder='Search something' variant='filled' value={searchText} onChange={(e)=>setSearchText(e.target.value)}/>
       <Suggestions values={searchText.length>2 ? [searchText,'static suggestion']:[]} 
       suggest={setSearchText}/>
       <InputRightElement children={<Center>
-        <img src={lookingGlass} />
+        <img src={lookingGlass} alt=''/>
         </Center>} />
     </InputGroup>
     <Center padding='0 1rem'>
-      <Link>
+      <Link href='/wishlist'>
         <IconButton icon={
-          <img src={heart} />
-        } bgColor='white'>
+          <img src={heart} alt=''/> // Bug : Keyboard navigation causes hover twice, because we're using a nested IconButton
+        } bgColor='white' aria-label='Wishlist'>
         </IconButton>
       </Link>
     </Center>
     <Center padding='0 1rem'>
-    <Link>
+    <RouterLink to='/bag'>
       <IconButton icon={
-        <img src={cart} />
-      } bgColor='white'>
+        <img src={cart} alt=''/>
+      } bgColor='white' aria-label='Bag'>
       </IconButton>
-    </Link>
+    </RouterLink>
   </Center>
   <Center padding='0 1rem'>
-  <Link>
+  <RouterLink to='/login'>
     <IconButton icon={
-      <img src={person} />
-    } bgColor='white'>
+      <img src={person} alt=''/>
+    } bgColor='white' aria-label='Login'>
     </IconButton>
-  </Link>
+  </RouterLink>
 </Center>
   </Flex>
 }

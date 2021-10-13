@@ -7,10 +7,10 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 import { IconButton } from '@chakra-ui/button';
-import Star from './assets/star_rate_black_24dp.svg'
 import ShoppingCart from './assets/shopping_bag_black_24dp.svg'
 import Heart from './assets/favorite_black_24dp.svg'
 import { LinkBox, LinkOverlay} from '@chakra-ui/layout';
+import Rating from './Rating';
 const data = {
   isNew: true,
   imageURL:
@@ -20,31 +20,6 @@ const data = {
   rating: 4.3,
   numReviews: 34,
 };
-
-function Rating({ rating, numReviews }) {
-  return (
-    <Box d="flex" alignItems="center" aria-label={rating + ' stars'}>
-      {Array(5)
-        .fill('')
-        .map((_, i) => {
-          const roundedRating = Math.round(rating * 2) / 2;
-          if (roundedRating - i >= 1) {
-            return (i < rating ?
-              <img src={Star} alt=''
-                key={i}
-                style={{ marginLeft: '1', width:'1.5rem', height:'1.5rem'}}
-              /> : ''
-            );
-          }
-          // to do : else if(roundedRating -i >=0.5) display a half star
-          return <span></span>;
-        })}
-      <Box as="span" ml="2" color="gray.600" fontSize="sm">
-        {numReviews} review{numReviews > 1 && 's'}
-      </Box>
-    </Box>
-  );
-}
 
 function Card() {
   return (
@@ -66,7 +41,7 @@ function Card() {
 
         <Box p="6">
           <Flex mt="1" justifyContent="space-between" alignContent="center">
-          <LinkOverlay href='#'>
+          <LinkOverlay href='/p/sampleProduct'>
             <Box
               fontSize="2xl"
               fontWeight="semibold"
@@ -83,7 +58,7 @@ function Card() {
               color={'gray.800'}
               fontSize={'1.2em'}>
               <chakra.a href={'#'} display={'flex'}>
-                <img src={ShoppingCart} alt='' h={7} w={7} alignSelf='center'/>
+                <img src={ShoppingCart} alt=''/>
               </chakra.a>
             </Tooltip>
           </Flex>
