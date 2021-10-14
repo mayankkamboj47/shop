@@ -1,5 +1,4 @@
 import Flickity from './Flickity';
-import './css/carousel.css';
 import Card from './Card';
 import { Heading, SimpleGrid } from '@chakra-ui/layout';
 import Category from './Category';

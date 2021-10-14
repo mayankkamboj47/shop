@@ -45,7 +45,7 @@ function NumInput(props){
   <NumberInputStepper>
     <NumberIncrementStepper />
     <NumberDecrementStepper />
-  </NumberInputStepper>    
+  </NumberInputStepper>
   </NumberInput>
 );
 }

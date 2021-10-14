@@ -34,7 +34,7 @@ function App() {
       <Route path='/userprofile'>
         <UserProfile />
       </Route>
-      <Route path='/'>
+      <Route exact path='/'>
         <Home />
       </Route>
     </Switch>
