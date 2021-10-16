@@ -1,4 +1,4 @@
-import {Nav} from './Nav';
+import Nav from './Nav';
 import Home from './Home';
 import FormIn from './FormIn';
 import {BrowserRouter as Router, Switch, Route} from'react-router-dom';
@@ -19,7 +19,7 @@ function App() {
       <Route path='/signup'>
         <FormIn action='Sign Up'/>
       </Route>
-      <Route path='/bag'>
+      <Route path='/cart'>
         <ProductList purpose='cart'/>
       </Route>
       <Route path='/wishlist'>
