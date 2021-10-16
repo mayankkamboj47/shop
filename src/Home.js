@@ -4,6 +4,7 @@ import Card from './Card';
 import { Heading, SimpleGrid } from '@chakra-ui/layout';
 import Category from './Category';
 import React from 'react';
+import FilterBar from './FilterBar';
 
 export default function Home(){
   return (
@@ -30,6 +31,7 @@ export default function Home(){
        title='Movies' />
        </SimpleGrid>
        <Heading p={4}>Products</Heading>
+       <FilterBar />
       <SimpleGrid minChildWidth='300px' spacing='3rem'>
         <Card />
         <Card />

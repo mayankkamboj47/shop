@@ -20,7 +20,6 @@ export default function UserProfile(){
     <OrderCard />
     <OrderCard /><OrderCard /><OrderCard /><OrderCard /><OrderCard /><OrderCard />
     </Flex>
-    
     </Flex>
     );
 }
