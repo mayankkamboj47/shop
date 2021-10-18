@@ -7,8 +7,8 @@ import { NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepp
 
 export default function ProductList({purpose}){
   let products = [
-    {title:'Black Dress',brand:'Mango',price:'$40', size:'XL', quantity:1},
-    {title:'Sneakers', brand:'Puma', price:'$10', size:8, quantity:2}
+    {title:'Black Dress',brand:'Mango',price:'$40', size:'XL', quantity:1, src:"https://cdn.luxe.digital/media/2021/02/24173658/best-little-black-dresses-marika-vera-review-luxe-digital%402x.jpg"},
+    {title:'Sneakers', brand:'Puma', price:'$10', size:8, quantity:2, src:"https://images-eu.ssl-images-amazon.com/images/I/41LKwyctnkL._SR600%2C315_PIWhiteStrip%2CBottomLeft%2C0%2C35_SCLZZZZZZZ_FMpng_BG255%2C255%2C255.jpg"}
   ];
   let link = purpose==='wishlist' ?<MoveToCartLink /> : <MoveToWishlistLink />;
   let button = purpose==='wishlist'?<MoveAllToCart/> : <Buy/>;
@@ -24,9 +24,9 @@ export default function ProductList({purpose}){
   </Flex>
 }
 
-function Product({title, brand, price, size, quantity, link}){
+function Product({title, brand, price, size, quantity, link, src}){
   return <Grid templateColumns='auto auto' columnGap={5}>
-    <Image gridRow='span 5' minHeight={150} minWidth={150}>
+    <Image gridRow='span 5' height={150} width={150} src={src}>
     </Image>
     <Heading as='h1' gridColumnStart={2} m={0} size='md'>{title}</Heading>
     <Heading as='h2' gridColumnStart={2} size='sm'>{brand}</Heading>
@@ -45,7 +45,7 @@ function NumInput(props){
   <NumberInputStepper>
     <NumberIncrementStepper />
     <NumberDecrementStepper />
-  </NumberInputStepper>    
+  </NumberInputStepper>
   </NumberInput>
 );
 }

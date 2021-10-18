@@ -19,7 +19,7 @@ function Suggestions({values, suggest}){
     )}
   </Flex>
 }
-export function Nav(){
+export default function Nav(){
   let [searchText,setSearchText] = useState('');
   return <Flex>
     <Center padding='0 20px'>
@@ -42,10 +42,10 @@ export function Nav(){
       </Link>
     </Center>
     <Center padding='0 1rem'>
-    <RouterLink to='/bag'>
+    <RouterLink to='/cart'>
       <IconButton icon={
         <img src={cart} alt=''/>
-      } bgColor='white' aria-label='Bag'>
+      } bgColor='white' aria-label='Cart'>
       </IconButton>
     </RouterLink>
   </Center>
