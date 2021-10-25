@@ -26,6 +26,5 @@ export default function CategoryPage(){
         <Card />
       </SimpleGrid>
       </React.Fragment>
-    );
-  
+    ); 
 }

@@ -11,6 +11,7 @@ export default function Rating({ rating, numReviews }) {
     </Box>
   );
 }
+
 export function Stars({rating}){
   return Array(5)
   .fill('')

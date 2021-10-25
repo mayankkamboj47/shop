@@ -7,8 +7,9 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 import { IconButton } from '@chakra-ui/button';
-import ShoppingCart from './assets/shopping_bag_black_24dp.svg'
-import Heart from './assets/favorite_black_24dp.svg'
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LinkBox, LinkOverlay} from '@chakra-ui/layout';
 import Rating from './Rating';
 const data = {
@@ -31,7 +32,7 @@ function Card() {
         shadow="sm"
         position="relative">
         {<IconButton icon={
-          <Image src={Heart} />
+          <FontAwesomeIcon icon={faHeart} />
         } aria-label='Add to wishlist' position='absolute' top={2} right={2}/>}
         <Image
           src={data.imageURL}
@@ -58,7 +59,7 @@ function Card() {
               color={'gray.800'}
               fontSize={'1.2em'}>
               <chakra.a href={'#'} display={'flex'}>
-                <img src={ShoppingCart} alt=''/>
+              <FontAwesomeIcon icon={faShoppingCart} />
               </chakra.a>
             </Tooltip>
           </Flex>

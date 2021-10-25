@@ -5,7 +5,7 @@ import {
   Image,
 } from '@chakra-ui/react';
 import { LinkBox, LinkOverlay } from '@chakra-ui/layout';
-
+// Another card only. Remove this component as a special component
 export default function Category({title,image}) {
   return (
     <LinkBox>
