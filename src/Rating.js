@@ -1,6 +1,6 @@
-import Star from './assets/star_rate_black_24dp.svg'
 import { Box } from '@chakra-ui/layout';
-
+import {faStar, faStarHalf} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export default function Rating({ rating, numReviews }) {
   return (
     <Box d="flex" alignItems="center" aria-label={rating + ' stars'}>
@@ -15,15 +15,18 @@ export default function Rating({ rating, numReviews }) {
 export function Stars({rating}){
   return Array(5)
   .fill('')
-  .map((_, i) => {
+  .map((_, index) => {
     const roundedRating = Math.round(rating * 2) / 2;
-    if (roundedRating - i >= 1) {
-      return (i < rating ?
-        <img src={Star} alt=''
-          key={i}
+    if (roundedRating - index >= 1) {
+      return (
+        <FontAwesomeIcon icon={faStar} 
+          key={index}
           style={{ marginLeft: '1', width:'1.5rem', height:'1.5rem'}}
-        /> : ''
-      )}
+        />)
+      }
+    else if(roundedRating -index === 0.5) {
+      return (<FontAwesomeIcon icon= {faStarHalf} key={index} style={{ marginLeft: '1', width:'1.5rem', height:'1.5rem'}}/>)
+      }
       else return ''
     }
        // to do : else if(roundedRating -i >=0.5) display a half star

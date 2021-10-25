@@ -7,8 +7,7 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 import { IconButton } from '@chakra-ui/button';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faShoppingCart  } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LinkBox, LinkOverlay} from '@chakra-ui/layout';
 import Rating from './Rating';
