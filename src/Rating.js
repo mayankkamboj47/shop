@@ -29,7 +29,5 @@ export function Stars({rating}){
       }
       else return ''
     }
-       // to do : else if(roundedRating -i >=0.5) display a half star
-       // return <span></span>;
       );
 }
