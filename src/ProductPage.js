@@ -11,6 +11,7 @@ import { Modal, ModalOverlay, ModalContent, ModalBody, ModalFooter, ModalHeader,
 import { FormControl } from "@chakra-ui/form-control";
 import { FormLabel } from "@chakra-ui/form-control";
 import { Textarea } from "@chakra-ui/textarea";
+import {useParams} from "react-router-dom";
 import {
   Table,
   Tbody,
@@ -30,28 +31,49 @@ const testReviews = [
    user : 'Bill Gates',
    verified : true,
    text : 'Buy this'
+  },
+  {title : 'very pretty and efficient',
+   rating : 4.5,
+   user : 'Elon',
+   verified : true,
+   text : 'Must buy'
   }
 ];
+let products = {
+  'iPhone':{
+    title : 'iPhone 13',
+    rating : 4.5,
+    images : [
+      {src : 'https://tse3.mm.bing.net/th?id=OIP.IumWkT1hfQ3DbUZJ47fYiQHaFj&pid=Api', alt:'An image'},
+      {src : 'https://tse4.mm.bing.net/th?id=OIP.rvSWtRd_oPRTwDoTCmkP5gHaE8&pid=Api', alt:'A peaceful image '}
+    ], 
+    description : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam officiis temporibus minus veniam ratione aperiam architecto doloribus obcaecati? Ipsa, aliquid quas animi nihil illo tenetur quis quod saepe fuga sapiente nulla sequi atque id culpa aspernatur provident repudiandae porro sunt?",
+    specifications : {
+      "made in " : "china",
+      "color"    : "rose gold",
+      "edible "  : "no"
+    },
+    reviews : testReviews
+  }
+}
 export default function ProductPage(){
-  let images = [
-    {src : 'https://tse3.mm.bing.net/th?id=OIP.IumWkT1hfQ3DbUZJ47fYiQHaFj&pid=Api', alt:'An image'},
-    {src : 'https://tse4.mm.bing.net/th?id=OIP.rvSWtRd_oPRTwDoTCmkP5gHaE8&pid=Api', alt:'A peaceful image '}
-  ]
+  let {title} = useParams(); 
+  let images = products[title].images;
   return (
     <Grid templateColumns='1fr 1fr'>
     <ProductImages images={images} />
     <Box p={4} gridColumn={{base:'span 2',lg:'span 1'}}>
-      <Heading mb={2}>Coconut Oil</Heading>
+      <Heading mb={2}>{title}</Heading>
       <Heading size='md'>$50</Heading>
-      <Rating rating={4} numReviews={8}/>
+      <Rating rating={5} numReviews={products[title].reviews.length}/>
       <Text my={5}>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam officiis temporibus minus veniam ratione aperiam architecto doloribus obcaecati? Ipsa, aliquid quas animi nihil illo tenetur quis quod saepe fuga sapiente nulla sequi atque id culpa aspernatur provident repudiandae porro sunt?
+        {products[title].description}
       </Text>
       <QuantityInput />
       <Button my={4} width='100%'>Add to Cart</Button>
     </Box>
     <Heading p={4}>Specifications</Heading>
-    <SpecsTable />
+    <SpecsTable specifications={products[title].specifications}/>
     <Heading px={4} mt={5} gridColumn='span 2'>Reviews</Heading>
     <Reviews reviews={testReviews} />
     </Grid>
@@ -100,21 +122,15 @@ function NumInput(props){
   </NumberInput>
 );
 }
-function SpecsTable(){
+function SpecsTable({specifications}){
   return (<Table variant="simple" colorScheme="gray " gridColumn='span 2'>
   <Tbody>
-    <Tr>
-      <Td>Made in</Td>
-      <Td>China</Td>
-    </Tr>
-    <Tr>
-      <Td>Quantity</Td>
-      <Td>250ml</Td>
-    </Tr>
-    <Tr>
-      <Td>Edible</Td>
-      <Td>No</Td>
-    </Tr>
+    {Object.keys(specifications).map(key=>{
+      return (<Tr>
+        <Td>{key}</Td>
+        <Td>{specifications[key]}</Td>
+      </Tr>)
+    })}
   </Tbody>
 </Table>);
 }

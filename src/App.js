@@ -25,13 +25,13 @@ function App() {
       <Route path='/wishlist'>
         <ProductList purpose='wishlist'/>
       </Route>
-      <Route path='/c/:category'>
+      <Route path='/c/:category'> // use this category and pass it to category page
           <CategoryPage />
       </Route>
-      <Route path='/p/:title'>
+      <Route path='/p/:title'> // same here
           <ProductPage />
       </Route>
-      <Route path='/userprofile'>
+      <Route path='/userprofile'> // same here
         <UserProfile />
       </Route>
       <Route exact path='/'>
