@@ -32,15 +32,13 @@ export default function Home(){
        <Heading p={4}>Products</Heading>
        <FilterBar />
       <SimpleGrid minChildWidth='300px' spacing='3rem'>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        <Card title='iPhone'/>
+        <Card title='iPhone'/>
+        <Card title='iPhone'/>
+        <Card title='iPhone'/>
+        <Card title='iPhone'/>
+        <Card title='iPhone'/>
       </SimpleGrid>
       </React.Fragment>
     );
-  
 }

@@ -22,7 +22,7 @@ const data = {
   numReviews: 34,
 };
 
-function Card() {
+function Card({title}) {
   return (
     <LinkBox>
       <Box
@@ -42,7 +42,7 @@ function Card() {
 
         <Box p="6">
           <Flex mt="1" justifyContent="space-between" alignContent="center">
-          <LinkOverlay href='/p/sampleProduct'>
+          <LinkOverlay href={`/p/${title}`}>
             <Box
               fontSize="2xl"
               fontWeight="semibold"
