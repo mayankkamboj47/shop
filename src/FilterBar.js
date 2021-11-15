@@ -1,42 +1,39 @@
 import { Button } from "@chakra-ui/button";
-import { Flex } from "@chakra-ui/layout";
-import { Menu, MenuButton, MenuItem, MenuList, MenuOptionGroup, MenuItemOption, MenuDivider } from "@chakra-ui/react"
+import { Flex, Heading, Text } from "@chakra-ui/layout";
+import { Menu, MenuButton, MenuItem, MenuList, MenuGroup} from "@chakra-ui/react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { RangeSlider,RangeSliderTrack, RangeSliderThumb, RangeSliderFilledTrack } from "@chakra-ui/slider";
-// Too simple to be a seperate component ? 
+import { useState } from "react";
+import React from "react";
+
 export default function FilterBar(){
   return <Flex p='1rem' justifyContent='space-between'>
- <Menu closeOnSelect={false}>
-  <MenuButton as={Button} colorScheme="blue">
-    Filter
-  </MenuButton>
-  <MenuList minWidth="240px">
-    <MenuOptionGroup defaultValue="range" title="Price" type="radio">
-      <MenuItemOption value="range">Range<RangeSlider
-  aria-label={"price-range"}
-  colorScheme="pink"
-  defaultValue={[10, 30]}
->
-  <RangeSliderTrack>
-    <RangeSliderFilledTrack />
-  </RangeSliderTrack>
-  <RangeSliderThumb index={0} />
-  <RangeSliderThumb index={1} />
-</RangeSlider></MenuItemOption>
-      
-    </MenuOptionGroup>
+    <Filter />
+    <Sort />
+  </Flex>
+}
 
-    <MenuDivider />
-    <MenuOptionGroup title="Country" type="checkbox">
-      <MenuItemOption value="email">Email</MenuItemOption>
-      <MenuItemOption value="phone">Phone</MenuItemOption>
-      <MenuItemOption value="country">Country</MenuItemOption>
-    </MenuOptionGroup>
-  </MenuList>
-</Menu>
-
-<Menu>
+function Filter(){
+  return (
+    <Menu closeOnSelect={false}>
+    <MenuButton as={Button} rightIcon={<FontAwesomeIcon icon={faChevronDown} />}>
+      Filter
+    </MenuButton>
+    <MenuList minWidth="20rem">
+        <MenuGroup title="Price" >
+          <MenuItem><Slider map={n=>`${n}k`} min={1} max={100}/></MenuItem>
+        </MenuGroup>
+        <MenuGroup title="Rating" >
+          <MenuItem><Slider /></MenuItem>
+        </MenuGroup>
+    </MenuList>
+  </Menu>  
+  );
+}
+function Sort(){
+  return (
+    <Menu>
       <MenuButton as={Button} rightIcon={<FontAwesomeIcon icon= {faChevronDown}/>}>
         Sort
       </MenuButton>
@@ -45,5 +42,37 @@ export default function FilterBar(){
         <MenuItem>Price</MenuItem>
       </MenuList>
 </Menu>
-  </Flex>
+  );
+}
+function Slider(props){
+  let [low, setLow] = useState(props.min || 1);
+  let [high, setHigh] = useState(props.max || 5);
+  let map = props.map || identity ; 
+  return (
+    <React.Fragment>
+    <Heading minW='7rem' mr={1} fontSize='xs'>{`${map(low)} - ${map(high)}`}</Heading>
+      <RangeSlider 
+      aria-label="price-range" 
+      colorScheme="pink" 
+      value={[low, high]} 
+      min={props.min || 1} 
+      max={props.max || 5}
+      onChange={changeRange}
+      >
+        <RangeSliderTrack>
+          <RangeSliderFilledTrack />
+        </RangeSliderTrack>
+        <RangeSliderThumb index={0}/>
+        <RangeSliderThumb index={1} />
+      </RangeSlider>
+    </React.Fragment>
+  );
+  function changeRange([low,high]){
+    if(high - low < 1) return;
+    setLow(low);
+    setHigh(high);
+  }
+  function identity(x){
+    return x;
+  }
 }
