@@ -4,8 +4,16 @@ import { Heading, SimpleGrid } from '@chakra-ui/layout';
 import {CategoryCard} from './Card';
 import React from 'react';
 import FilterBar from './FilterBar';
+import {useState, useEffect} from 'react';
+import axios from 'axios';
 
 export default function Home(){
+  let [products, setProducts] = useState([]);
+  useEffect(async ()=>{
+    let response = await axios.get('http://localhost:3001/products');
+    console.log(response.data);
+    setProducts(response.data);
+  },[]);
   return (
     <React.Fragment>
       <Flickity options={{wrapAround:true}} className={'main-carousel'} >
@@ -32,13 +40,21 @@ export default function Home(){
        <Heading p={4}>Products</Heading>
        <FilterBar />
       <SimpleGrid minChildWidth='300px' spacing='3rem'>
-        <Card title='iPhone'/>
-        <Card title='iPhone'/>
-        <Card title='iPhone'/>
-        <Card title='iPhone'/>
-        <Card title='iPhone'/>
-        <Card title='iPhone'/>
+        {products.map(product=>{
+          return (<Card title={product.product_name}
+          name={capitalise(product.product_name)}
+          price={product.product_cost}
+          rating = {product.product_rating}
+          numReviews = {product.product_num_of_reviews}
+          />)
+        })}
       </SimpleGrid>
       </React.Fragment>
     );
+}
+
+
+
+function capitalise(str){
+  return str.toLowerCase().split(' ').map(word=>word[0].toUpperCase() + word.slice(1)).join(' ');
 }

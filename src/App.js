@@ -7,6 +7,7 @@ import CategoryPage from './CategoryPage';
 import { Box } from '@chakra-ui/layout';
 import ProductPage from './ProductPage';
 import UserProfile from './UserProfile';
+
 function App() {
   return (
   <Router>
@@ -25,13 +26,13 @@ function App() {
       <Route path='/wishlist'>
         <ProductList purpose='wishlist'/>
       </Route>
-      <Route path='/c/:category'> // use this category and pass it to category page
+      <Route path='/c/:category'> 
           <CategoryPage />
       </Route>
-      <Route path='/p/:title'> // same here
+      <Route path='/p/:title'> 
           <ProductPage />
       </Route>
-      <Route path='/userprofile'> // same here
+      <Route path='/userprofile'> 
         <UserProfile />
       </Route>
       <Route exact path='/'>

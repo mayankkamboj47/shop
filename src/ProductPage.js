@@ -3,7 +3,7 @@ import { Badge, Grid, Heading, Text } from "@chakra-ui/layout";
 import { Flex , Box} from "@chakra-ui/layout";
 import { Button, IconButton } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Rating from "./Rating";
 import {Stars} from "./Rating";
 import { useDisclosure } from "@chakra-ui/hooks";
@@ -12,6 +12,7 @@ import { FormControl } from "@chakra-ui/form-control";
 import { FormLabel } from "@chakra-ui/form-control";
 import { Textarea } from "@chakra-ui/textarea";
 import {useParams} from "react-router-dom";
+import axios from 'axios';
 import {
   Table,
   Tbody,
@@ -58,31 +59,48 @@ let products = {
 }
 export default function ProductPage(){
   let {title} = useParams(); 
-  let images = products[title].images;
+  let [description, setDescription] = useState('');
+  let [reviews, setReviews] = useState([]);
+  let [specifications, setSpecifications] = useState({});
+  let [rating, setRating] = useState(5);
+  let [numReviews,setNumReviews] = useState(0);
+  let [images,setImages] = useState([]);
+  useEffect(async function(){ // calls the function when the component is mounted
+    let response = await axios.get(`http://localhost:3001/products/${encodeURI(title)}`);
+    setDescription(response.data.product_desc);
+    setRating(response.data.product_rating);
+    setNumReviews(response.data.product_num_of_reviews);
+    fetchReviews(response.data._id);
+  },[]);
   return (
     <Grid templateColumns='1fr 1fr'>
     <ProductImages images={images} />
     <Box p={4} gridColumn={{base:'span 2',lg:'span 1'}}>
       <Heading mb={2}>{title}</Heading>
       <Heading size='md'>$50</Heading>
-      <Rating rating={5} numReviews={products[title].reviews.length}/>
+      <Rating rating={rating} numReviews={numReviews}/>
       <Text my={5}>
-        {products[title].description}
+        {description}
       </Text>
       <QuantityInput />
       <Button my={4} width='100%'>Add to Cart</Button>
     </Box>
     <Heading p={4}>Specifications</Heading>
-    <SpecsTable specifications={products[title].specifications}/>
+    <SpecsTable specifications={specifications}/>
     <Heading px={4} mt={5} gridColumn='span 2'>Reviews</Heading>
-    <Reviews reviews={testReviews} />
+    <Reviews reviews={reviews} />
     </Grid>
-  )
+  );
+
+  async function fetchReviews(_id){
+    let response = await axios.get(`http://localhost:3001/reviews/${_id}`);
+    setReviews(response.data);
+  }
 }
 
 function ProductImages({images}){
-  let [mainSrc, showImage] = useState(images[0].src || 'Some "No image" image url here');
-  let [mainAlt, setAlt] = useState(images[0].alt || 'No images of this product');
+  let [mainSrc, showImage] = useState(images[0]?.src || 'Some "No image" image url here');
+  let [mainAlt, setAlt] = useState(images[0]?.alt || 'No images of this product');
   let changeMain = ({src,alt})=>{
     showImage(src);
     setAlt(alt);
