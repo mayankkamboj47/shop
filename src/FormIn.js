@@ -1,22 +1,33 @@
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { Flex, Heading } from "@chakra-ui/layout";
 import { Button, IconButton } from "@chakra-ui/button";
-import React, {useState} from "react";
-import { Link } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import { Link, useHistory} from "react-router-dom";
 import { Link as ChakraLink } from "@chakra-ui/layout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faFacebook} from "@fortawesome/free-brands-svg-icons";
 import axios from 'axios';
 
 export default function FormIn({action}){
-  console.log(document.cookie);
-  if(action==='Login') return <LoginForm />;
-  return <SignUpForm />;
+  let [renderedComp, setRenderedComponent] = useState(<React.Fragment/>); // use a spinner instead
+  let history = useHistory();
+  useEffect(()=>{
+    if(action==='Login'){
+      axios.get('http://localhost:3001/user',{withCredentials : true}).then(res=>{
+        if(res.data===null) setRenderedComponent(<LoginForm />);
+        else history.push('/userprofile');
+      }).catch(()=>setRenderedComponent(<LoginForm />));
+    }
+    else setRenderedComponent(<SignUpForm />);
+  },[action, history]);
+  return renderedComp;
 }
 
 function LoginForm(){
   let [username, setUsername] = useState('');
   let [password, setPassword] = useState('');
+  let history = useHistory();
+
   return (
     <form onSubmit={makeLoginRequest}>
       <Flex direction='column' alignItems='center' p='3rem 0'>
@@ -41,21 +52,14 @@ function LoginForm(){
 
   async function makeLoginRequest(e){
     e.preventDefault();
-    let response;
     try{
-      response = await axios({
+      await axios({
         url : 'http://localhost:3001/login',
         method : 'POST',
         data : {username,password},
         withCredentials : true
       });
-      console.log(response);
-      alert('Success. Now trying user');
-      let user = await axios.get('http://localhost:3001/user',{
-          withCredentials: true
-        });
-      alert('Done. See console.');
-      console.log(user);
+      history.push('/userprofile');
     }
     catch(e){
       alert(e);
@@ -102,8 +106,6 @@ function PasswordInput({placeholder, value, onChange}) {
     </InputGroup>
   )
 }
-
-
 
 function OAuthButtons(){
   return (

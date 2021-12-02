@@ -13,65 +13,30 @@ import { FormLabel } from "@chakra-ui/form-control";
 import { Textarea } from "@chakra-ui/textarea";
 import {useParams} from "react-router-dom";
 import axios from 'axios';
-import {
-  Table,
-  Tbody,
-  Tr,
-  Td,
-} from "@chakra-ui/react"
 import { NumberInput, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, NumberInputField} from "@chakra-ui/number-input";
 
-const testReviews = [
-  {title : 'Excellent Product',
-   rating: 5, 
-   user : 'Ashley Smith', 
-   verified: false, 
-   text: 'I enjoyed this oil a lot'},
-  {title : 'Took my depression away',
-   rating : 5,
-   user : 'Bill Gates',
-   verified : true,
-   text : 'Buy this'
-  },
-  {title : 'very pretty and efficient',
-   rating : 4.5,
-   user : 'Elon',
-   verified : true,
-   text : 'Must buy'
-  }
-];
-let products = {
-  'iPhone':{
-    title : 'iPhone 13',
-    rating : 4.5,
-    images : [
-      {src : 'https://tse3.mm.bing.net/th?id=OIP.IumWkT1hfQ3DbUZJ47fYiQHaFj&pid=Api', alt:'An image'},
-      {src : 'https://tse4.mm.bing.net/th?id=OIP.rvSWtRd_oPRTwDoTCmkP5gHaE8&pid=Api', alt:'A peaceful image '}
-    ], 
-    description : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam officiis temporibus minus veniam ratione aperiam architecto doloribus obcaecati? Ipsa, aliquid quas animi nihil illo tenetur quis quod saepe fuga sapiente nulla sequi atque id culpa aspernatur provident repudiandae porro sunt?",
-    specifications : {
-      "made in " : "china",
-      "color"    : "rose gold",
-      "edible "  : "no"
-    },
-    reviews : testReviews
-  }
-}
 export default function ProductPage(){
   let {title} = useParams(); 
   let [description, setDescription] = useState('');
   let [reviews, setReviews] = useState([]);
-  let [specifications, setSpecifications] = useState({});
   let [rating, setRating] = useState(5);
   let [numReviews,setNumReviews] = useState(0);
+  // eslint-disable-next-line no-unused-vars
   let [images,setImages] = useState([]);
-  useEffect(async function(){ // calls the function when the component is mounted
-    let response = await axios.get(`http://localhost:3001/products/${encodeURI(title)}`);
-    setDescription(response.data.product_desc);
-    setRating(response.data.product_rating);
-    setNumReviews(response.data.product_num_of_reviews);
-    fetchReviews(response.data._id);
-  },[]);
+  let [_id, set_id] = useState('');
+  let [quantity, setQuantity] = useState(1);
+  let [inCart, setInCart] = useState(false);
+  useEffect(function(){
+    async function fetchProductData(){
+      let response = await axios.get(`http://localhost:3001/products/${encodeURI(title)}`);
+      setDescription(response.data.product_desc);
+      setRating(response.data.product_rating);
+      setNumReviews(response.data.product_num_of_reviews);
+      set_id(response.data._id);
+      setReviews((await axios.get(`http://localhost:3001/reviews/${response.data._id}`)).data);
+    }
+    fetchProductData();
+  },[title]);
   return (
     <Grid templateColumns='1fr 1fr'>
     <ProductImages images={images} />
@@ -82,19 +47,22 @@ export default function ProductPage(){
       <Text my={5}>
         {description}
       </Text>
-      <QuantityInput />
-      <Button my={4} width='100%'>Add to Cart</Button>
+      <QuantityInput onChange={setQuantity} value={quantity}/>
+      <Button my={4} width='100%' onClick={()=>addToCart().then(setInCart(true))} colorScheme={inCart ? 'gray': 'pink'}>Add{inCart ? 'ed' : ''} to Cart</Button>
     </Box>
-    <Heading p={4}>Specifications</Heading>
-    <SpecsTable specifications={specifications}/>
     <Heading px={4} mt={5} gridColumn='span 2'>Reviews</Heading>
     <Reviews reviews={reviews} />
     </Grid>
   );
 
-  async function fetchReviews(_id){
-    let response = await axios.get(`http://localhost:3001/reviews/${_id}`);
-    setReviews(response.data);
+  function addToCart(e){
+    return axios.get('http://localhost:3001/products/toCart',{
+      withCredentials : true,
+      params : {
+        product_id : _id,
+        quantity
+      }
+    });
   }
 }
 
@@ -122,11 +90,11 @@ function ProductImages({images}){
   }
 }
 
-function QuantityInput(){
+function QuantityInput(props){
   return (
   <Flex style={{gap:'1rem'}} alignItems='center'>
   <Text>Quantity</Text>
-  <NumInput />
+  <NumInput {...props}/>
   </Flex>);
 }
 
@@ -139,18 +107,6 @@ function NumInput(props){
   </NumberInputStepper>    
   </NumberInput>
 );
-}
-function SpecsTable({specifications}){
-  return (<Table variant="simple" colorScheme="gray " gridColumn='span 2'>
-  <Tbody>
-    {Object.keys(specifications).map(key=>{
-      return (<Tr>
-        <Td>{key}</Td>
-        <Td>{specifications[key]}</Td>
-      </Tr>)
-    })}
-  </Tbody>
-</Table>);
 }
 
 function Review({title,rating,user,verified,text}){

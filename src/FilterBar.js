@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/button";
-import { Flex, Heading, Text } from "@chakra-ui/layout";
+import { Flex, Heading } from "@chakra-ui/layout";
 import { Menu, MenuButton, MenuItem, MenuList, MenuGroup} from "@chakra-ui/react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
