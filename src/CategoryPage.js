@@ -1,10 +1,11 @@
 import Flickity from './Flickity';
 import './css/carousel.css';
-import Card from './Card';
-import { SimpleGrid } from '@chakra-ui/layout';
 import React from 'react';
-import FilterBar from './FilterBar';
+import {useParams} from 'react-router-dom';
+import FilterableProducts from './FilterableProducts';
+
 export default function CategoryPage(){
+  let {category} = useParams();
   return (
     <React.Fragment>
       <Flickity options={{wrapAround:true}} className={'main-carousel'} >
@@ -15,16 +16,7 @@ export default function CategoryPage(){
           2
         </div>
       </Flickity>
-       <FilterBar />
-      <SimpleGrid minChildWidth='300px' spacing='3rem'>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-      </SimpleGrid>
+      <FilterableProducts dataSource={'http://localhost:3001/products/category/'+category} />
       </React.Fragment>
     ); 
 }

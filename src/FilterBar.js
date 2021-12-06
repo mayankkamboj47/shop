@@ -6,43 +6,100 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { RangeSlider,RangeSliderTrack, RangeSliderThumb, RangeSliderFilledTrack } from "@chakra-ui/slider";
 import { useState } from "react";
 import React from "react";
-
-export default function FilterBar(){
+/**
+ * 
+ * FilterBar (filterOptions : Object, sortOptions : Object)
+ * 
+ * filterOptions : Each key is a different way to filter, value is an Object which gives
+ * further details such as the range of values possible for the parameter, functions to
+ * trigger etc. 
+ * 
+ * eg. {
+ *  price : {
+ *    min : 1,
+ *    max : 10,
+ *    units : '$',
+ *    onMinChange : (newMinValue)=>{},
+ *    onMaxChange : (newMaxValue)=>{}
+ *  },
+ *  rating : {
+ *    min : 1,
+ *    max : 5,
+ *    ...
+ *  }
+ * }
+ */
+export default function FilterBar({filterOptions, sortOptions}){
   return <Flex p='1rem' justifyContent='space-between'>
-    <Filter />
-    <Sort />
+    <Filter options={filterOptions}/>
+    <Sort options={sortOptions}/>
   </Flex>
 }
 
-function Filter(){
+function Filter({options={}}={}){
   return (
     <Menu closeOnSelect={false}>
     <MenuButton as={Button} rightIcon={<FontAwesomeIcon icon={faChevronDown} />}>
       Filter
     </MenuButton>
     <MenuList minWidth="20rem">
-        <MenuGroup title="Price" >
-          <MenuItem><Slider map={n=>`${n}k`} min={1} max={100}/></MenuItem>
+    {Object.keys(options).map(option=>({...options[option], title : option})).map(({
+      title,
+      start=1, 
+      end=5, 
+      units='', 
+      onMinChange=identity, 
+      onMaxChange=identity}={})=>
+      (
+        <MenuGroup title={title}>
+          <MenuItem>
+            <Slider map={n=>units+n} min={start} max={end} 
+            onChange={
+              (low,high)=>{
+                onMinChange(low);
+                onMaxChange(high);
+              }
+            }/>
+          </MenuItem>
         </MenuGroup>
-        <MenuGroup title="Rating" >
-          <MenuItem><Slider /></MenuItem>
-        </MenuGroup>
+      ))}
     </MenuList>
-  </Menu>  
+  </Menu>
   );
 }
-function Sort(){
+function Sort({options={}}={}){
+  /**
+   * options : Each key is a different way to sort, value is a function that is triggered with the 
+   * appropriate boolean value which corresponds to whether the function was turned on or off. 
+   * The rest of the triggers are automatically called with false whenever one is clicked. 
+   */
   return (
     <Menu>
       <MenuButton as={Button} rightIcon={<FontAwesomeIcon icon= {faChevronDown}/>}>
         Sort
       </MenuButton>
       <MenuList>
-        <MenuItem>Popularity</MenuItem>
-        <MenuItem>Price</MenuItem>
+      {Object.keys(options).map(option=>
+        <ToggleItem title={option} onToggle={(val)=>onToggle(option,val)} key={option}/>)}
       </MenuList>
-</Menu>
+    </Menu>
   );
+  function ToggleItem({title, onToggle}){
+    let [isOn, setIsOn] = useState(false);
+    let onClick = ()=>{
+      let newIsOn = !isOn;
+      setIsOn(newIsOn);
+      onToggle(newIsOn);
+    }
+    return <MenuItem onClick={onClick}>{title}</MenuItem>
+  }
+  function onToggle(option,val){
+    let callback = options[option];
+    callback(val);
+    for(let key in options){
+      if(key!==option) options[key](false);
+    }
+  }
 }
 function Slider(props){
   let [low, setLow] = useState(props.min || 1);
@@ -57,7 +114,7 @@ function Slider(props){
       value={[low, high]} 
       min={props.min || 1} 
       max={props.max || 5}
-      onChange={changeRange}
+      onChange={([low,high])=>{changeRange([low,high]) && props.onChange(low,high)}}
       >
         <RangeSliderTrack>
           <RangeSliderFilledTrack />
@@ -71,8 +128,10 @@ function Slider(props){
     if(high - low < 1) return;
     setLow(low);
     setHigh(high);
-  }
-  function identity(x){
-    return x;
-  }
+    return true;
+    }
+}
+
+function identity(x){
+  return x;
 }

@@ -1,17 +1,9 @@
 import Flickity from './Flickity';
-import Card from './Card';
 import { Heading, SimpleGrid } from '@chakra-ui/layout';
 import {CategoryCard} from './Card';
 import React from 'react';
-import FilterBar from './FilterBar';
-import {useState, useEffect} from 'react';
-import axios from 'axios';
-
+import FilterableProducts from './FilterableProducts';
 export default function Home(){
-  let [products, setProducts] = useState([]);
-  useEffect(()=>{
-    axios.get('http://localhost:3001/products').then(res=>setProducts(res.data));
-  },[]);
   return (
     <React.Fragment>
       <Flickity options={{wrapAround:true}} className={'main-carousel'} >
@@ -32,24 +24,7 @@ export default function Home(){
        title='Summer'/>
        </SimpleGrid>
        <Heading p={4}>Products</Heading>
-       <FilterBar />
-      <SimpleGrid minChildWidth='300px' spacing='3rem'>
-        {products.map(product=>{
-          return (<Card title={product.product_name}
-          name={capitalise(product.product_name)}
-          price={product.product_cost}
-          rating = {product.product_rating}
-          numReviews = {product.product_num_of_reviews}
-          _id={product._id}
-          />)
-        })}
-      </SimpleGrid>
+       <FilterableProducts dataSource='http://localhost:3001/products'/>
       </React.Fragment>
     );
-}
-
-
-
-function capitalise(str){
-  return str.toLowerCase().split(' ').map(word=>word[0].toUpperCase() + word.slice(1)).join(' ');
 }

@@ -112,8 +112,8 @@ function Review({title,product_rating,username,isVerified,review_text}){
 function Reviews({reviews,_id, addReview}){
   return (
   <Box p={4}>
-  {reviews.map(review=><Review {...review} />)}
   <ReviewModal _id={_id} addReview={addReview}></ReviewModal>
+  {reviews.map(review=><Review {...review} />)}
   </Box>);
 }
 function ReviewModal({_id, addReview}){
@@ -159,6 +159,7 @@ function ReviewModal({_id, addReview}){
     </React.Fragment>
   );
   async function postReview(){
+    try{
     let response = (await axios.get('http://localhost:3001/reviews/add/'+_id,{
       withCredentials : true,
       params : {
@@ -168,6 +169,10 @@ function ReviewModal({_id, addReview}){
       }
     }));
     addReview(response.data);
-    onClose();
+  }
+  catch(e){
+    alert('You\'re not logged in');
+  }
+  onClose();
   }
 }
