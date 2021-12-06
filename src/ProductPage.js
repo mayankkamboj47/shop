@@ -3,7 +3,7 @@ import { Badge, Grid, Heading, Text } from "@chakra-ui/layout";
 import { Flex , Box} from "@chakra-ui/layout";
 import { Button, IconButton } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Rating from "./Rating";
 import {Stars} from "./Rating";
 import { useDisclosure } from "@chakra-ui/hooks";
@@ -51,7 +51,7 @@ export default function ProductPage(){
       <Button my={4} width='100%' onClick={()=>addToCart().then(setInCart(true))} colorScheme={inCart ? 'gray': 'pink'}>Add{inCart ? 'ed' : ''} to Cart</Button>
     </Box>
     <Heading px={4} mt={5} gridColumn='span 2'>Reviews</Heading>
-    <Reviews reviews={reviews} />
+    <Reviews reviews={reviews} _id={_id} addReview={(review)=>setReviews(reviews.slice().concat([review]))}/>
     </Grid>
   );
 
@@ -101,7 +101,7 @@ function QuantityInput(props){
 function NumInput(props){
   return (<NumberInput width='5rem' min={1} aria-label='Quantity' defaultValue={1} {...props}>
   <NumberInputField />
-  <NumberInputStepper>
+  <NumberInputStepper>  
     <NumberIncrementStepper />
     <NumberDecrementStepper />
   </NumberInputStepper>    
@@ -109,27 +109,30 @@ function NumInput(props){
 );
 }
 
-function Review({title,rating,user,verified,text}){
+function Review({title,product_rating,username,isVerified,review_text}){
   return (<Box mb={4}>
     <Heading size='sm'>{title}</Heading>
-    <Flex><Stars rating={rating} /></Flex>
-    <Text>{text}</Text>
-    <Text as='cite'>{user} 
-    {verified?<Badge>Verified User</Badge>:''}
+    <Flex><Stars rating={product_rating} /></Flex>
+    <Text>{review_text}</Text>
+    <Text as='cite'>{username} 
+    {isVerified?<Badge>Verified User</Badge>:''}
     </Text>
   </Box>);
 }
-function Reviews({reviews}){
+function Reviews({reviews,_id, addReview}){
   return (
   <Box p={4}>
   {reviews.map(review=><Review {...review} />)}
-  <ReviewModal></ReviewModal>
+  <ReviewModal _id={_id} addReview={addReview}></ReviewModal>
   </Box>);
 }
-function ReviewModal(){
+function ReviewModal({_id, addReview}){
   const {isOpen, onOpen, onClose} = useDisclosure();
+  let [rating,setRating] = useState(5);
+  let [details, setDetails] = useState('');
+  let [title, setTitle] = useState('');
   return (
-    <>
+    <React.Fragment>
       <Button onClick={onOpen}>Leave a review</Button>
       <Modal
         initialFocus
@@ -144,26 +147,37 @@ function ReviewModal(){
           <ModalBody pb={6}>
             <FormControl>
               <FormLabel>Title</FormLabel>
-              <Input  placeholder="Title" />
+              <Input  placeholder="Title" value={title} onChange={(e)=>setTitle(e.target.value)}/>
             </FormControl>
             <FormControl mt={4}>
               <FormLabel>Rating</FormLabel>
-              <NumInput max={5} />
+              <NumInput max={5} min={1} onChange={setRating} value={rating}/>
             </FormControl>
             <FormControl mt={4}>
               <FormLabel>Details</FormLabel>
-              <Textarea placeholder="" />
+              <Textarea placeholder="" onChange={(e)=>setDetails(e.target.value)} value={details}/>
             </FormControl>
           </ModalBody>
-
           <ModalFooter>
-            <Button colorScheme="blue" mr={3}>
+            <Button colorScheme="blue" mr={3} onClick={()=>postReview()}>
               Post
             </Button>
             <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
-  )
+    </React.Fragment>
+  );
+  async function postReview(){
+    let response = (await axios.get('http://localhost:3001/reviews/add/'+_id,{
+      withCredentials : true,
+      params : {
+        title : title,
+        product_rating : rating, 
+        review_text : details
+      }
+    }));
+    addReview(response.data);
+    onClose();
+  }
 }
