@@ -8,11 +8,11 @@ import Rating from "./Rating";
 import {Stars} from "./Rating";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Modal, ModalOverlay, ModalContent, ModalBody, ModalFooter, ModalHeader, ModalCloseButton} from "@chakra-ui/modal";
-import { FormControl } from "@chakra-ui/form-control";
-import { FormLabel } from "@chakra-ui/form-control";
+import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Textarea } from "@chakra-ui/textarea";
 import {useParams} from "react-router-dom";
 import axios from 'axios';
+import { addToCart } from "./utils";
 import { NumberInput, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, NumberInputField} from "@chakra-ui/number-input";
 
 export default function ProductPage(){
@@ -48,22 +48,12 @@ export default function ProductPage(){
         {description}
       </Text>
       <QuantityInput onChange={setQuantity} value={quantity}/>
-      <Button my={4} width='100%' onClick={()=>addToCart().then(setInCart(true))} colorScheme={inCart ? 'gray': 'pink'}>Add{inCart ? 'ed' : ''} to Cart</Button>
+      <Button my={4} width='100%' onClick={()=>addToCart(_id, quantity).then(setInCart(true))} colorScheme={inCart ? 'gray': 'pink'}>Add{inCart ? 'ed' : ''} to Cart</Button>
     </Box>
     <Heading px={4} mt={5} gridColumn='span 2'>Reviews</Heading>
     <Reviews reviews={reviews} _id={_id} addReview={(review)=>setReviews(reviews.slice().concat([review]))}/>
     </Grid>
   );
-
-  function addToCart(e){
-    return axios.get('http://localhost:3001/products/toCart',{
-      withCredentials : true,
-      params : {
-        product_id : _id,
-        quantity
-      }
-    });
-  }
 }
 
 function ProductImages({images}){

@@ -40,6 +40,7 @@ export default function Home(){
           price={product.product_cost}
           rating = {product.product_rating}
           numReviews = {product.product_num_of_reviews}
+          _id={product._id}
           />)
         })}
       </SimpleGrid>

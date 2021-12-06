@@ -12,16 +12,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LinkBox, LinkOverlay} from '@chakra-ui/layout';
 import { Heading } from '@chakra-ui/layout';
 import Rating from './Rating';
+import { addToCart, addToWishlist } from './utils';
 
 function Card({title,
-   isNew=true, 
    imageURL = 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=4600&q=80',
    name = 'Wayfarer Classic', 
    price = 4.5, 
    rating = 4.3, 
-   numReviews = 34} = {}) {
+   numReviews = 34,
+   _id} = {}) {
   return (
-    <LinkBox>
       <Box
         bg={useColorModeValue('white', 'gray.800')}
         borderWidth="1px"
@@ -30,13 +30,20 @@ function Card({title,
         position="relative">
         {<IconButton icon={
           <FontAwesomeIcon icon={faHeart} />
-        } aria-label='Add to wishlist' position='absolute' top={2} right={2}/>}
+        } aria-label='Add to wishlist' position='absolute' top={2} right={2}
+        onClick={
+        (e)=>{
+          e.preventDefault();
+          e.stopPropagation();
+          addToWishlist(_id);
+        }
+        }/>}
         <Image
           src={imageURL}
           alt={`Picture of ${name}`}
           roundedTop="sm" 
         />
-
+        <LinkBox>
         <Box p="6">
           <Flex mt="1" justifyContent="space-between" alignContent="center">
           <LinkOverlay href={`/p/${title}`}>
@@ -57,7 +64,13 @@ function Card({title,
               placement={'top'}
               color={'gray.800'}
               fontSize={'1.2em'}>
-              <chakra.a href={'#'} display={'flex'}>
+              <chakra.a href={'#'} display={'flex'} onClick={async (e)=>{
+                e.preventDefault();
+                alert('Heyo');
+                // for some reason, post await is not working. Do one thing, make frontend changes before only, and hope things are alright. If they go wrong, add a catch statement here and hope it
+                // catches stuff. 
+                await addToCart(_id);
+              }}>
               <FontAwesomeIcon icon={faShoppingCart} />
               </chakra.a>
             </Tooltip>
@@ -73,15 +86,14 @@ function Card({title,
             </Box>
           </Flex>
         </Box>
+        </LinkBox>
       </Box>
-      </LinkBox>
   );
 }
 
 export default Card;
 
 export function OrderCard({title,
-  isNew=true, 
   imageURL = 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=4600&q=80',
   name = 'Wayfarer Classic', 
   price = 4.5, 
