@@ -27,7 +27,9 @@ function Card({title,
         borderWidth="1px"
         rounded="sm"
         shadow="sm"
-        position="relative">
+        position="relative"
+        maxW='20rem'
+        >
         {<IconButton icon={
           <FontAwesomeIcon icon={faHeart} />
         } aria-label='Add to wishlist' position='absolute' top={2} right={2}
