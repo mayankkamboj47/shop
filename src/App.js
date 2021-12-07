@@ -7,11 +7,14 @@ import CategoryPage from './CategoryPage';
 import { Box } from '@chakra-ui/layout';
 import ProductPage from './ProductPage';
 import UserProfile from './UserProfile';
+import { useState } from 'react';
 
 function App() {
+  let [cartItemsCount, setCartItemsCount] = useState(0);
+  let incrementCartCount = ()=>setCartItemsCount(cartItemsCount+1);
   return (
   <Router>
-    <Nav />
+    <Nav cartItemsCount={cartItemsCount} setCartItemsCount={setCartItemsCount}/>
     <Box maxWidth='1480px' margin='0 auto'>
     <Switch>
       <Route path='/login'>
@@ -27,16 +30,16 @@ function App() {
         <ProductList purpose='wishlist'/>
       </Route>
       <Route path='/c/:category'> 
-          <CategoryPage />
+          <CategoryPage incrementCartCount={incrementCartCount}/>
       </Route>
       <Route path='/p/:title'> 
-          <ProductPage />
+          <ProductPage incrementCartCount={incrementCartCount}/>
       </Route>
       <Route path='/userprofile'> 
         <UserProfile />
       </Route>
       <Route exact path='/'>
-        <Home />
+        <Home incrementCartCount={incrementCartCount}/>
       </Route>
     </Switch>
     </Box>

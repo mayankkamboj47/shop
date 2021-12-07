@@ -4,7 +4,10 @@ import { Link } from "@chakra-ui/layout"
 import { Link as RouterLink } from "react-router-dom"
 import { faHeart, faShoppingCart, faUser, faSearch } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { Tag, TagLabel } from "@chakra-ui/tag"
+import axios from "axios";
+
 function Suggestions({values, suggest}){
   return <Flex direction='column' position='absolute' bottom='0px' transform='translateY(100%)' width='100%' background='white'
   zIndex={4}>
@@ -15,8 +18,18 @@ function Suggestions({values, suggest}){
     )}
   </Flex>
 }
-export default function Nav(){
+export default function Nav({cartItemsCount, setCartItemsCount}){
   let [searchText,setSearchText] = useState('');
+  useEffect(()=>{
+    axios.get('http://localhost:3001/user/cart_items/length',{
+      withCredentials : true
+    }).then(
+      res=>setCartItemsCount(res.data)
+    ).catch(
+      err=>setCartItemsCount(0)
+    )
+  },[]);
+
   return <Flex>
     <Center padding='0 20px'>
     <RouterLink to='/'>Logo</RouterLink>
@@ -32,14 +45,17 @@ export default function Nav(){
     <Center padding='0 1rem'>
       <Link href='/wishlist'>
         <FontAwesomeIcon icon={
-          faHeart // Bug : Keyboard navigation causes hover twice, because we're using a nested IconButton
+          faHeart
         }  aria-label='Wishlist'>
         </FontAwesomeIcon>
       </Link>
     </Center>
-    <Center padding='0 1rem'>
+    <Center padding='0 1rem' position='relative'>
     <RouterLink to='/cart'>
       <FontAwesomeIcon icon={faShoppingCart} />
+      <Tag position='absolute' bottom={-1} right={-1} bgColor='red.300'>
+        <TagLabel fontWeight='bolder' color='white'>{cartItemsCount}</TagLabel>
+      </Tag>
     </RouterLink>
   </Center>
   <Center padding='0 1rem'>

@@ -7,7 +7,7 @@ import { Heading, SimpleGrid } from '@chakra-ui/layout';
 const MIN_PRICE = 0;
 const MAX_PRICE = 100;
 
-export default function FilterableProducts({dataSource}){
+export default function FilterableProducts({dataSource, incrementCartCount}){
   let [products, setProducts] = useState([]);
   let [lowPrice, setLowPrice] = useState(MIN_PRICE);
   let [highPrice, setHighPrice] = useState(MAX_PRICE);
@@ -66,6 +66,7 @@ export default function FilterableProducts({dataSource}){
             rating = {product.product_rating}
             numReviews = {product.product_num_of_reviews}
             _id={product._id}
+            incrementCartCount = {incrementCartCount}
           />)
       })
   }

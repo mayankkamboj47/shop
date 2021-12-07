@@ -20,7 +20,8 @@ function Card({title,
    price = 4.5, 
    rating = 4.3, 
    numReviews = 34,
-   _id} = {}) {
+   _id,
+  incrementCartCount} = {}) {
   return (
       <Box
         bg={useColorModeValue('white', 'gray.800')}
@@ -69,6 +70,7 @@ function Card({title,
               <chakra.a href={'#'} display={'flex'} onClick={async (e)=>{
                 e.preventDefault();
                 alert('Heyo');
+                incrementCartCount();
                 // for some reason, post await is not working. Do one thing, make frontend changes before only, and hope things are alright. If they go wrong, add a catch statement here and hope it
                 // catches stuff. 
                 await addToCart(_id);

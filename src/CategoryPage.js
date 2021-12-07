@@ -4,7 +4,7 @@ import React from 'react';
 import {useParams} from 'react-router-dom';
 import FilterableProducts from './FilterableProducts';
 
-export default function CategoryPage(){
+export default function CategoryPage({incrementCartCount}){
   let {category} = useParams();
   return (
     <React.Fragment>
@@ -16,7 +16,7 @@ export default function CategoryPage(){
           2
         </div>
       </Flickity>
-      <FilterableProducts dataSource={'http://localhost:3001/products/category/'+category} />
+      <FilterableProducts dataSource={'http://localhost:3001/products/category/'+category} incrementCartCount={incrementCartCount}/>
       </React.Fragment>
     ); 
 }

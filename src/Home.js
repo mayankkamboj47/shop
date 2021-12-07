@@ -3,7 +3,7 @@ import { Heading, SimpleGrid } from '@chakra-ui/layout';
 import {CategoryCard} from './Card';
 import React from 'react';
 import FilterableProducts from './FilterableProducts';
-export default function Home(){
+export default function Home({incrementCartCount}){
   return (
     <React.Fragment>
       <Flickity options={{wrapAround:true}} className={'main-carousel'} >
@@ -24,7 +24,7 @@ export default function Home(){
        title='Summer'/>
        </SimpleGrid>
        <Heading p={4}>Products</Heading>
-       <FilterableProducts dataSource='http://localhost:3001/products'/>
+       <FilterableProducts dataSource='http://localhost:3001/products' incrementCartCount={incrementCartCount}/>
       </React.Fragment>
     );
 }
