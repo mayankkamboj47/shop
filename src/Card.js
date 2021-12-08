@@ -13,6 +13,7 @@ import { LinkBox, LinkOverlay} from '@chakra-ui/layout';
 import { Heading } from '@chakra-ui/layout';
 import Rating from './Rating';
 import { addToCart, addToWishlist } from './utils';
+import { useState } from 'react';
 
 function Card({title,
    imageURL = 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=4600&q=80',
@@ -22,6 +23,7 @@ function Card({title,
    numReviews = 34,
    _id,
   incrementCartCount} = {}) {
+    let [heartColor, setHeartColor] = useState('black');
   return (
       <Box
         bg={useColorModeValue('white', 'gray.800')}
@@ -32,12 +34,13 @@ function Card({title,
         maxW='20rem'
         >
         {<IconButton icon={
-          <FontAwesomeIcon icon={faHeart} />
+          <FontAwesomeIcon icon={faHeart} color={heartColor}/>
         } aria-label='Add to wishlist' position='absolute' top={2} right={2}
         onClick={
         (e)=>{
           e.preventDefault();
           e.stopPropagation();
+          setHeartColor('#dd0000');
           addToWishlist(_id);
         }
         }/>}
@@ -84,7 +87,7 @@ function Card({title,
             <Rating rating={rating} numReviews={numReviews}  />
             <Box fontSize="2xl" color={useColorModeValue('gray.800', 'white')}>
               <Box as="span" color={'gray.600'} fontSize="lg">
-                £
+                $
               </Box>
               {price.toFixed(2)}
             </Box>
@@ -131,7 +134,7 @@ export function OrderCard({title,
             </Box>
             </LinkOverlay>
             <Box as="span" color={'gray.600'} fontSize="lg">
-            £    {price.toFixed(2)}
+            $    {price.toFixed(2)}
 
           </Box>
           </Flex>
