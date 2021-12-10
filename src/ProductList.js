@@ -6,7 +6,7 @@ import {useState} from "react";
 import { Button } from "@chakra-ui/button";
 import { NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper } from "@chakra-ui/number-input";
 import axios from "axios";
-
+import CheckoutPage from "./CheckoutPage";
 export default function ProductList({purpose, cartItemsCount, setCartItemsCount}){
   let incrementCartCount = ()=>setCartItemsCount(cartItemsCount+1);
   let decrementCartCount = ()=>setCartItemsCount(cartItemsCount-1);
@@ -56,9 +56,17 @@ function Wishlist({incrementCartCount}){
  */
 function Cart({decrementCartCount, resetCartCount}){
   let [products, setProducts] = useState([]);
+  let [atCheckout, setAtCheckout] = useState(false);
   useEffect(()=>{
     axios.get('http://localhost:3001/user/cart_items',{withCredentials:true}).then(r=>r.data.filter(x=>x)).then(setProducts)
   },[]);
+  if(atCheckout) return <CheckoutPage products={products} onCheckout={
+    ()=>{
+      alert('Thanks for buying. Your order will arrive in 10 days');
+      axios.get('http://localhost:3001/cartToOrderedItems',{withCredentials : true});
+      resetCartCount();
+    }
+  }/>
   return (
     <Flex direction='column' width='fit-content' style={{gap : 30}} p='1rem 0 0 1rem'>
     <Heading>Cart</Heading>
@@ -80,7 +88,7 @@ function Cart({decrementCartCount, resetCartCount}){
             }
             }
           />
-      ).concat([<Button>Buy</Button>])}
+      ).concat([<Button onClick={()=>setAtCheckout(true)}>Buy</Button>])}
   </Flex>
   );
 }

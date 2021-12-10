@@ -8,7 +8,7 @@ import { Button } from "@chakra-ui/button";
 import axios from "axios";
 
 
-export default function CheckoutPage(){
+export default function CheckoutPage({products, onCheckout}){
   let [addressComponent, setAddressComponent] = useState(<Spinner />);
   useEffect(()=>{
     axios.get('http://localhost:3001/user',{withCredentials: true}).then(
@@ -22,9 +22,9 @@ export default function CheckoutPage(){
     );
   },[]);
   return (
-    <Box maxW='30rem' position='relative' margin='0 auto' p='1rem'>
+    <Box maxW='40rem' position='relative' margin='0 auto' p='1rem'>
       <Heading p='1.2rem 0 0 1.2rem' size='md'>Order Summary</Heading>
-      <TotalTable />
+      <TotalTable products={products}/>
       <Flex direction='column'>
         <Heading pl='1.2rem' size='md'>Deliver to</Heading>
         {addressComponent}
@@ -36,25 +36,30 @@ export default function CheckoutPage(){
           <option>Cash on delivery</option>
         </Select>
       </Flex>
-      <Button m='1.2rem'>Proceed to Checkout</Button>
+      <Button m='1.2rem' onClick={onCheckout}>Proceed to Checkout</Button>
     </Box>
   )
 }
 
-function TotalTable(){
+function TotalTable({products}){
   return (
     <Table >
-    <Tr>
-      <Td>Black Shirt</Td>
-      <Td isNumeric>$15</Td>
-    </Tr>
-    <Tr>
-      <Td>Trousers</Td>
-      <Td isNumeric>$10</Td>
-    </Tr>
+    {products.map(
+      product=>(
+        <Tr>
+          <Td>{product.product_name}</Td>
+          <Td isNumeric>x {product.quantity}</Td>
+          <Td isNumeric>$ {product.product_cost * product.quantity}</Td>
+        </Tr>
+      )
+    )}
     <Tfoot>
       <Th>Total</Th>
-      <Th isNumeric>$25</Th>
+      <Td></Td>
+      <Th isNumeric>$ {
+        products.reduce(
+          (sum,product)=>sum + product.product_cost*product.quantity
+        ,0).toFixed(2)}</Th>
     </Tfoot>
   </Table>
   )
