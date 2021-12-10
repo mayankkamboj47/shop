@@ -91,7 +91,6 @@ function SignUpForm(){
 
   async function makeSignupRequest(e){
     e.preventDefault();
-    alert('hander is working');
     try{
       await axios({
         url : 'http://localhost:3001/user',

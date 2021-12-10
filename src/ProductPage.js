@@ -14,6 +14,7 @@ import {useParams} from "react-router-dom";
 import axios from 'axios';
 import { addToCart } from "./utils";
 import { NumberInput, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, NumberInputField} from "@chakra-ui/number-input";
+import { Spinner } from "@chakra-ui/spinner";
 
 export default function ProductPage({incrementCartCount}){
   let {title} = useParams(); 
@@ -21,8 +22,9 @@ export default function ProductPage({incrementCartCount}){
   let [reviews, setReviews] = useState([]);
   let [rating, setRating] = useState(5);
   let [numReviews,setNumReviews] = useState(0);
+  let [cost, setCost] = useState(50);
   // eslint-disable-next-line no-unused-vars
-  let [images,setImages] = useState([]);
+  let [imageComponent,setImageComponent] = useState(<Spinner />);
   let [_id, set_id] = useState('');
   let [quantity, setQuantity] = useState(1);
   let [inCart, setInCart] = useState(false);
@@ -32,50 +34,53 @@ export default function ProductPage({incrementCartCount}){
       setDescription(response.data.product_desc);
       setRating(response.data.product_rating);
       setNumReviews(response.data.product_num_of_reviews);
+      setImageComponent(<ProductImages images={response.data.product_images} />);
+      console.log(response.data);
       set_id(response.data._id);
+      setCost(response.data.product_cost);
       setReviews((await axios.get(`http://localhost:3001/reviews/${response.data._id}`)).data);
     }
     fetchProductData();
   },[title]);
   return (
     <Grid templateColumns='1fr 1fr'>
-    <ProductImages images={images} />
+    {imageComponent}
     <Box p={4} gridColumn={{base:'span 2',lg:'span 1'}}>
       <Heading mb={2}>{title}</Heading>
-      <Heading size='md'>$50</Heading>
+      <Heading size='md'>${cost}</Heading>
       <Rating rating={rating} numReviews={numReviews}/>
       <Text my={5}>
         {description}
       </Text>
       <QuantityInput onChange={setQuantity} value={quantity}/>
       <Button my={4} width='100%' onClick={()=>addToCart(_id, quantity).then(setInCart(true)).then(incrementCartCount())} colorScheme={inCart ? 'gray': 'pink'}>Add{inCart ? 'ed' : ''} to Cart</Button>
+      <Heading mt={5} gridColumn='span 2'>Reviews</Heading>
+      <Reviews reviews={reviews} _id={_id} addReview={(review)=>setReviews(reviews.slice().concat([review]))}/>
     </Box>
-    <Heading px={4} mt={5} gridColumn='span 2'>Reviews</Heading>
-    <Reviews reviews={reviews} _id={_id} addReview={(review)=>setReviews(reviews.slice().concat([review]))}/>
     </Grid>
   );
 }
 
 function ProductImages({images}){
-  let [mainSrc, showImage] = useState(images[0]?.src || 'Some "No image" image url here');
+  let [mainSrc, showImage] = useState(images[0]?.url || 'Some "No image" image url here');
   let [mainAlt, setAlt] = useState(images[0]?.alt || 'No images of this product');
-  let changeMain = ({src,alt})=>{
-    showImage(src);
+
+  let changeMain = ({url,alt})=>{
+    showImage(url);
     setAlt(alt);
   }
   return (<Box p={4} gridColumn={{base:'span 2',lg:'span 1'}}>
-    <MainImage src={mainSrc} alt={mainAlt} />
+    <Image src={mainSrc} alt={mainAlt} maxW='30rem'/>
     <Thumbnails images={images} changeMain={changeMain} />
-  </Box>)
+  </Box>) 
 
-  function MainImage({src,alt}){
-    return <Image src={src} alt={alt} />
-  }
+
   function Thumbnails({images,changeMain}){
     return (<Flex pt={1} style={{gap:'1rem'}}>
     {images.map((image,i)=>(
-      <IconButton onClick={()=>changeMain({...image})} icon={<Image key={image.src} src={image.src} alt={image.alt} height='100%'/>} /> 
-      ))}
+      <IconButton key={image.url} onClick={()=>changeMain({...image})} icon={<Image key={image.src} src={image.url} alt={image.alt} height='100%'/>} /> 
+      ))
+    }
     </Flex>); 
   }
 }
@@ -94,7 +99,7 @@ function NumInput(props){
   <NumberInputStepper>  
     <NumberIncrementStepper />
     <NumberDecrementStepper />
-  </NumberInputStepper>    
+  </NumberInputStepper>
   </NumberInput>
 );
 }
@@ -109,13 +114,15 @@ function Review({title,product_rating,username,isVerified,review_text}){
     </Text>
   </Box>);
 }
+
 function Reviews({reviews,_id, addReview}){
   return (
-  <Box p={4}>
+  <Box py={4}>
   <ReviewModal _id={_id} addReview={addReview}></ReviewModal>
   {reviews.map(review=><Review {...review} />)}
   </Box>);
 }
+
 function ReviewModal({_id, addReview}){
   const {isOpen, onOpen, onClose} = useDisclosure();
   let [rating,setRating] = useState(5);
@@ -123,7 +130,7 @@ function ReviewModal({_id, addReview}){
   let [title, setTitle] = useState('');
   return (
     <React.Fragment>
-      <Button onClick={onOpen}>Leave a review</Button>
+      <Button onClick={onOpen} mb={5}>Leave a review</Button>
       <Modal
         initialFocus
         finalFocus

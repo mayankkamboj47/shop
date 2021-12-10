@@ -53,7 +53,7 @@ export default function Nav({cartItemsCount, setCartItemsCount}){
     <Center padding='0 1rem' position='relative'>
     <RouterLink to='/cart'>
       <FontAwesomeIcon icon={faShoppingCart} />
-      <Tag position='absolute' bottom={-1} right={-1} bgColor='red.300'>
+      <Tag position='absolute' bottom={0} right={-1} bgColor='red.300' size='sm'>
         <TagLabel fontWeight='bolder' color='white'>{cartItemsCount}</TagLabel>
       </Tag>
     </RouterLink>

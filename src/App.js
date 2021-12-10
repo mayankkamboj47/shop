@@ -25,10 +25,10 @@ function App() {
         <FormIn action='Sign Up'/>
       </Route>
       <Route path='/cart'>
-        <ProductList purpose='cart'/>
+        <ProductList purpose='cart' cartItemsCount={cartItemsCount} setCartItemsCount={setCartItemsCount}/>
       </Route>
       <Route path='/wishlist'>
-        <ProductList purpose='wishlist'/>
+        <ProductList purpose='wishlist' cartItemsCount={cartItemsCount} setCartItemsCount={setCartItemsCount}/>
       </Route>
       <Route path='/c/:category'> 
           <CategoryPage incrementCartCount={incrementCartCount}/>

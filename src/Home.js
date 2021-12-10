@@ -16,12 +16,15 @@ export default function Home({incrementCartCount}){
       </Flickity>
       <Heading p={4}>Categories</Heading>
       <SimpleGrid minChildWidth='300px' spacing='3rem' p='2rem 0'>
-      <CategoryCard image='https://images.unsplash.com/photo-1518051870910-a46e30d9db16?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1350&q=80'
+      <CategoryCard image='https://res.cloudinary.com/dl6m7txan/image/upload/v1602429759/3_nhmz6u.jpg'
        title='Black'/>
-       <CategoryCard image='https://images.unsplash.com/photo-1518051870910-a46e30d9db16?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1350&q=80'
+       <CategoryCard image='https://res.cloudinary.com/dl6m7txan/image/upload/v1602429779/41_zoo1yo.jpg'
        title='Formal'/>
-       <CategoryCard image='https://images.unsplash.com/photo-1518051870910-a46e30d9db16?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1350&q=80'
+       <CategoryCard image='https://res.cloudinary.com/dl6m7txan/image/upload/v1602429777/27_htd76r.jpg'
        title='Summer'/>
+       <CategoryCard image='https://res.cloudinary.com/dl6m7txan/image/upload/v1602429778/30_lfhthy.jpg'
+       title='Jacket'/>
+
        </SimpleGrid>
        <Heading p={4}>Products</Heading>
        <FilterableProducts dataSource='http://localhost:3001/products' incrementCartCount={incrementCartCount}/>

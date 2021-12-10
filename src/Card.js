@@ -72,7 +72,7 @@ function Card({title,
               fontSize={'1.2em'}>
               <chakra.a href={'#'} display={'flex'} onClick={async (e)=>{
                 e.preventDefault();
-                alert('Heyo');
+                alert('Added to cart');
                 incrementCartCount();
                 // for some reason, post await is not working. Do one thing, make frontend changes before only, and hope things are alright. If they go wrong, add a catch statement here and hope it
                 // catches stuff. 
@@ -163,7 +163,6 @@ export function CategoryCard({title,image}) {
           rounded={'lg'}
           mt={-12}
           pos={'relative'}
-          height={'230px'}
           _after={{
             transition: 'all .3s ease',
             content: '""',
@@ -183,7 +182,6 @@ export function CategoryCard({title,image}) {
           }}>
           <Image
             rounded={'lg'}
-            height={230}
             width={282}
             objectFit={'cover'}
             src={image}

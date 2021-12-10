@@ -67,6 +67,7 @@ export default function FilterableProducts({dataSource, incrementCartCount}){
             numReviews = {product.product_num_of_reviews}
             _id={product._id}
             incrementCartCount = {incrementCartCount}
+            imageURL={product.product_images[0].url}
           />)
       })
   }
