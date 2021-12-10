@@ -10,6 +10,7 @@ import axios from "axios";
 export default function UserProfile(){
   let [username,setUsername] = useState('');
   let [address, setAddress] = useState('');
+  let [orderedItems, setOrderedItems] = useState([]);
   useEffect(()=>{
     axios.get('http://localhost:3001/user',{withCredentials : true}).then(
       response=>{
@@ -17,7 +18,13 @@ export default function UserProfile(){
         setAddress(response.data.delivery_addr);
       }
     )
+    axios.get('http://localhost:3001/user/ordered_items',{withCredentials : true}).then(
+      response=>{
+        setOrderedItems(response.data)
+      }
+    )
   },[]);
+
   return (
     <Flex p={5} alignItems='center' flexDirection='column'>
       <CustomControlsExample value={username} fontSize='4xl' onSubmit={changeUsername} onChange={setUsername}/>
@@ -26,13 +33,12 @@ export default function UserProfile(){
       {/** Orders have an item, a date. For the sake of simplicity,  the order could just be a productId and a date. How do we display it ? 
       Just display a date, and a card associated with it*/}
       <Flex wrap='wrap' style={{gap:'1rem'}} justifyContent='center'>
-        <OrderCard />
-        <OrderCard />
-        <OrderCard />
-        <OrderCard />
-        <OrderCard />
-        <OrderCard />
-        <OrderCard />
+      {orderedItems.filter(p=>p!==null).map(
+        product=>
+        <OrderCard imageURL={product.product_images[0].url}
+                   name={product.product_name}
+                   date={product.date}/>
+      )}
       </Flex>
     </Flex>
     );
