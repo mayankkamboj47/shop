@@ -3,15 +3,28 @@ import { Heading, SimpleGrid } from '@chakra-ui/layout';
 import {CategoryCard} from './Card';
 import React from 'react';
 import FilterableProducts from './FilterableProducts';
+
 export default function Home({incrementCartCount}){
+  let carouselStyles = {
+    'newArrivals' : {
+      background : 'url(https://images.pexels.com/photos/934070/pexels-photo-934070.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260), linear-gradient(to bottom, #d6dae3,#d5d9e2,#d8dce5,#d3d7e0, #d6dce3)',
+      backgroundSize : 'auto 150%',
+      backgroundRepeat : 'no-repeat',
+      backgroundPosition : 'right center'
+    },
+    'blacks' : {
+      background : 'url("https://images.pexels.com/photos/952670/pexels-photo-952670.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260") black',
+      backgroundSize : 'cover'
+    }
+  }
   return (
     <React.Fragment>
       <Flickity options={{wrapAround:true}} className={'main-carousel'} >
-        <div className='carousel-cell'>
-        1
+        <div className='carousel-cell' style={carouselStyles.newArrivals}>
+          <Heading size='4xl' m='6rem 0 0 6rem' bgGradient='linear(to-r,#EB5757,black 80%)' bgClip={'text'}>New Arrivals</Heading>
         </div>
-        <div className='carousel-cell'>
-          2
+        <div className='carousel-cell' style={carouselStyles.blacks}> 
+          <Heading size='4xl' m='6rem 0 0 6rem' bgGradient='linear(to-r,#E8CBC0,#636FA4)' bgClip={'text'}>Finest blacks</Heading>
         </div>
       </Flickity>
       <Heading p={4}>Categories</Heading>

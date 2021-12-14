@@ -5,6 +5,7 @@ import { Link as RouterLink } from "react-router-dom"
 import { faHeart, faShoppingCart, faUser, faSearch } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useEffect, useState } from "react"
+import { useHistory } from "react-router-dom"
 import { Tag, TagLabel } from "@chakra-ui/tag"
 import axios from "axios";
 
@@ -20,6 +21,8 @@ function Suggestions({values, suggest}){
 }
 export default function Nav({cartItemsCount, setCartItemsCount}){
   let [searchText,setSearchText] = useState('');
+  let [suggestions, setSuggestions] = useState([]);
+  let history = useHistory();
   useEffect(()=>{
     axios.get('http://localhost:3001/user/cart_items/length',{
       withCredentials : true
@@ -29,15 +32,28 @@ export default function Nav({cartItemsCount, setCartItemsCount}){
       err=>setCartItemsCount(0)
     )
   },[]);
+  let changeAndAutoSuggest = (text)=>{
+    setSearchText(text);
+    if(text.length < 3) return setSuggestions([]);
+    axios.get('http://localhost:3001/search/autosuggest/'+text).then(
+      response=>setSuggestions(response.data)
+    )
+  };
+
+  function search(text){
+    setSearchText(text);
+    setSuggestions([]);
+    history.push('/search/'+text);
+  }
 
   return <Flex>
     <Center padding='0 20px'>
     <RouterLink to='/'>Logo</RouterLink>
     </Center>
     <InputGroup>
-      <Input placeholder='Search something' variant='filled' value={searchText} onChange={(e)=>setSearchText(e.target.value)}/>
-      <Suggestions values={searchText.length>2 ? [searchText,'static suggestion']:[]} 
-      suggest={setSearchText}/>
+      <Input placeholder='Search something' variant='filled' value={searchText} onChange={(e)=>changeAndAutoSuggest(e.target.value)} onKeyDown={(e)=>e.key==='Enter' && search(searchText)}/>
+      <Suggestions values={suggestions} 
+      suggest={(a)=>search(a)}/>
       <InputRightElement children={<Center>
         <FontAwesomeIcon icon={faSearch} />
         </Center>} />

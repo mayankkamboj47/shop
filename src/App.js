@@ -9,6 +9,7 @@ import ProductPage from './ProductPage';
 import UserProfile from './UserProfile';
 import { useState } from 'react';
 import CheckoutPage from './CheckoutPage';
+import SearchPage from './SearchPage';
 
 function App() {
   let [cartItemsCount, setCartItemsCount] = useState(0);
@@ -39,8 +40,8 @@ function App() {
       <Route path='/userprofile'> 
         <UserProfile />
       </Route>
-      <Route path='/test'>
-        <CheckoutPage />
+      <Route path='/search/:query'>
+        <SearchPage />
       </Route>
       <Route exact path='/'>
         <Home incrementCartCount={incrementCartCount}/>
