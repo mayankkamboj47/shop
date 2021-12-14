@@ -8,9 +8,8 @@ import { Box } from '@chakra-ui/layout';
 import ProductPage from './ProductPage';
 import UserProfile from './UserProfile';
 import { useState } from 'react';
-import CheckoutPage from './CheckoutPage';
 import SearchPage from './SearchPage';
-
+import About, {ContactUs} from './About';
 function App() {
   let [cartItemsCount, setCartItemsCount] = useState(0);
   let incrementCartCount = ()=>setCartItemsCount(cartItemsCount+1);
@@ -42,6 +41,12 @@ function App() {
       </Route>
       <Route path='/search/:query'>
         <SearchPage />
+      </Route>
+      <Route path='/about'>
+        <About />
+      </Route>
+      <Route path='/contact'>
+        <ContactUs />
       </Route>
       <Route exact path='/'>
         <Home incrementCartCount={incrementCartCount}/>

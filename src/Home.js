@@ -3,7 +3,8 @@ import { Heading, SimpleGrid } from '@chakra-ui/layout';
 import {CategoryCard} from './Card';
 import React from 'react';
 import FilterableProducts from './FilterableProducts';
-
+import { Flex } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 export default function Home({incrementCartCount}){
   let carouselStyles = {
     'newArrivals' : {
@@ -19,6 +20,17 @@ export default function Home({incrementCartCount}){
   }
   return (
     <React.Fragment>
+    <Flex p='1rem'>
+      <Link to='/about' style={{'margin-right':'3rem'}}>
+      About
+      </Link>
+      <Link to='/contact'>
+      Contact
+      </Link>
+      <Link to='/signup' style={{'margin-left':'auto'}}>
+      Sign up
+      </Link>
+    </Flex>
       <Flickity options={{wrapAround:true}} className={'main-carousel'} >
         <div className='carousel-cell' style={carouselStyles.newArrivals}>
           <Heading size='4xl' m='6rem 0 0 6rem' bgGradient='linear(to-r,#EB5757,black 80%)' bgClip={'text'}>New Arrivals</Heading>
