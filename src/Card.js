@@ -130,6 +130,7 @@ export function OrderCard({
               fontWeight="semibold"
               as="h4"
               lineHeight="tight"
+              maxW='17rem'
               isTruncated>
               {name}
             </Box>
