@@ -19,10 +19,5 @@ npm start
 
 Note : Once you do this for one folder, you will need to open another terminal window or tab to repeat the process for the other folder. Don't Ctrl + C the terminal as it will stop the server.
 
-# Contributors
-1. Mayank Kamboj - Implemented features of front-end and back-end.
-2. Ashwin Salampuria - Implemented features of front-end.
-3. Karan Handa - Implemented features of back-end
-
 # Data
 The clothing dataset was taken from https://github.com/actuallysoham/fshn/blob/master/backend/data.js
